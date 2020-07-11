@@ -1,0 +1,34 @@
+version: "3"
+services:
+  btc-node:
+    image: ronaldcrb/bitcoin-core:0.20-alpine
+    command: "
+    -zmqpubrawtx=tcp://0.0.0.0:29000 \
+    -zmqpubrawblock=tcp://0.0.0.0:29000 \
+    -zmqpubhashtx=tcp://0.0.0.0:29000 \
+    -zmqpubhashblock=tcp://0.0.0.0:29000 \
+    -printtoconsole \
+    -regtest=1
+    "
+    ports:
+      - 29000:29000
+
+  btc-go-proxy:
+    build: .
+    depends_on:
+      - btc-node
+    ports:
+      - 4000:4000
+    environment:
+      - PORT=4000
+      - BTC_NODE_ZMQ_ADDR=tcp://btc-node:29000
+
+  # btc-rust-proxy:
+  #   build: ./rust-proxy
+  #   depends_on:
+  #     - btc-node
+  #   ports:
+  #     - 28000:28000
+  #   environment:
+  #     - BTC_NODE_ZMQ_ADDR=tcp://btc-node:29000
+        
