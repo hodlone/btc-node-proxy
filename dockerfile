@@ -21,7 +21,6 @@ COPY . .
 RUN go build -o main .
 
 # Expose port 4000 to the outside world
-EXPOSE 29000
 EXPOSE 4000
 
 # Command to run the executable

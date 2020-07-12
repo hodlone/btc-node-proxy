@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"sync"
 
@@ -14,6 +15,8 @@ var (
 )
 
 func main() {
+
+	log.Printf("env var %v\n", btcNodeZmqAddr)
 	wg := new(sync.WaitGroup)
 
 	wg.Add(2)

@@ -15,7 +15,7 @@ func Start(port string) {
 		w.Write([]byte("ok"))
 	})
 
-	log.Printf("Bot server starting on port %v", port)
+	log.Printf("Proxy healthcheck online on port:  %v", port)
 	port = fmt.Sprintf(":%v", port)
 	log.Fatal(http.ListenAndServe(port, mux))
 }
