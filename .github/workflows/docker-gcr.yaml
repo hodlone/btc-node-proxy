@@ -1,0 +1,47 @@
+name: Docker GCR build and push
+# This workflow is triggered on pushes to the repository.
+on:
+  push:
+    branches:    
+      - master
+    
+  workflow_dispatch:
+    inputs:
+      gcr_host:
+        description: 'Google Container Registry Host'
+        required: true
+        default: 'gcr.io'
+      image_name:
+        description: 'Name of the image. Should be specified without domain and project.'
+        required: true
+        default: 'btc-node-proxy'
+      image_tag:
+        description: 'Image tag to set for the built image.'
+        required: true
+        default: 'latest'
+
+jobs:
+  name: Push image to docker registry
+  runs-on: ubuntu-latest
+    steps:
+      - name: Build and push docker image to GCR
+        uses: RaccoonDev/push-docker-gcr@v1
+        with:
+          gcr_host: gcr.io
+          image_name: btc-node-proxy
+          image_tag: latest
+          env:
+            GOOGLE_PROJECT_ID: webicluster
+            GCLOUD_SERVICE_KEY: '{
+              "type": "service_account",
+              "project_id": "webicluster",
+              "private_key_id": "7fe5e7431ac13c658d8f3617e793994674ffb925",
+              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCnR7iMpvHUvptZ\notCtgKqHiqcmrFczfn9DUoRF3aFer+7nu5owcslKbj97yBpAZf5sK1DnwR2kqQ+P\nb9P685RcNO3Hn0NhQK8hKp1jHC4SqYBsAlquRWs+mgZUMeCmzYQa04+Whbqdre75\n5YaXFvjkEFSFApuI7ntiO3Nky1Lj7kq8Dj8cTiAe/mKI19RM9zlB8ZkFZGgWaPng\nsfh42VmoWwUlMOZYpP1oXB7McbkwxdTz3NwgTLy49HR3dTkrt1CMO4Hx+R742/Iv\nAMnSSEzklg72zxF6yguS2DJqbUsx+Pda4IbQvGgHiQRn3r2hk305ObeO6yOSA+cY\nXLC72LEzAgMBAAECggEAALJ6rv/1aOxwKVCesFFKG4Q5kGey56Cb6XY0S39kZxHE\npSKbB5+FIq21POJC53Zgyjl62WojfX1W5GfdMk+z3XMWc8H3UDYqhLDefeocuVTm\n8voB0iyxCSnCCGxfFHd2z8XPq2Rcb1KpHXYWSqihR8jpo41rzRm6fn0sXxcsImlW\nrdq1TeLS2gKO4vW01oFy8r43/HKTEmaNwnOntMlKwNhyKw6ZLQ6oiiJMLZFApZGM\nCTOvJRRYcfFnusOBeGPoWHtj30WCvgTLzh6JQearKz2qUF4d8fuwn71hOQn74nYY\n/LRKREew2jtmMZFXPZh8VqQrmGysxmnvNaGuHe7bAQKBgQDfCFBsxIvfqRFE2anf\ni3bf5B3t2xyfJkEqwmM9ebXM4zNN/tiBl5W//5Osl1Tl0HpBm00BS8Cqyti3NTzh\n+Lm2zGgpfO/I993v1KRTLNBiz6IIIs3LnnQEEGEOcOurf2e2wRZMnv7GhEG2kseC\nMkZ64In6bDwpq1NH37rDtTYYowKBgQDAAbRvPe6MQ95Z2gEogcScIdIujrV9lKgx\nyoExenRQ7QB49FraXZmGkxyBVHD5+HtX/+uloRM1z3QliRiF5ArV5ythvrgvWUHs\nVxh+zj2bK7x6NiUhWTJhe8RuSx6/8x6fcpFZyzhI8vnIpEFR2quZH3CWjYsKSV9N\nJqkfu0e+MQKBgBRQPIr7h8XSLzl3Haq3mBciPruYNk4kfND5LXK+8Bj+JIEZEf0T\nolb/XyLcEaZwy4HINEZG8QBdQ0nEdowaTEfi7CXDNE+4i6U5V9IfhcdKI/bbvKSs\nBOMN3tki3cQb8YVKps5JuOi5yQZo7fTkwViVtNtzGjOtYANu1CLZEVlDAoGAVkNt\n0Vy9w/7p8uxjANPshUkcqRYsrBMRzezxRk2B3KneQHloKBtNUozdja1mZKgiolK0\niGFpxA9EW2jQv7bIt3l4oB2TmpI7b/dhZfc67nAj6bRR0j3EyM9WXUcatZqA85oB\ne5o123BukJpbTm80EUNyzfEhuqlkS8FG0p7NiMECgYEAsiS36UCFnHc4D+mQRc5s\nKg0FTL4Xl7RdeKv2EpDlH16HPy+vULfUiKv/5LyAySygg6UAdzEopI2UfbNuGM9o\nlNj5mGRSf39Wrig6nJQ7Kpp5bmCibEilZDIa0Vo595YV7oEMCFw5i6+7jNsL8p9t\nWYO2xSUhEJU9eSMxaUG4fxw=\n-----END PRIVATE KEY-----\n",
+              "client_email": "nodehodl-github@webicluster.iam.gserviceaccount.com",
+              "client_id": "101466575518076437370",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nodehodl-github%40webicluster.iam.gserviceaccount.com"
+            }'
+
