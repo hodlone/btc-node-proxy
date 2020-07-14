@@ -41,7 +41,7 @@ func Start(btcNodeZmqAddr string) {
 
 		log.Printf("Event: %v", e)
 		addrs := []byte(addr)
-		log.Printf("Address: %v", addr)
+		log.Printf("Address: %v", addrs)
 		decode(addrs)
 		log.Printf("Value: %v", v)
 		// bl, er := btc.NewBlock([]byte(addr))

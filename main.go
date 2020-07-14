@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"sync"
 
 	"btc-node-proxy/listener"
@@ -9,8 +10,8 @@ import (
 )
 
 var (
-	btcNodeZmqAddr = "tcp://bitcoin-core.bitcoin-test.svc.cluster.local:29000"
-	serverPort     = "4500"
+	btcNodeZmqAddr = os.Getenv("os.Getenv(key)")
+	serverPort     = os.Getenv("PORT")
 )
 
 func main() {
