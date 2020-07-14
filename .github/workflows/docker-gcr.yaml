@@ -41,6 +41,7 @@ jobs:
     name: Push image to docker registry
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - name: Build and push docker image to GCR
         uses: RaccoonDev/push-docker-gcr@v1
         with:
