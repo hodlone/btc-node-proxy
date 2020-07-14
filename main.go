@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	btcNodeZmqAddr = os.Getenv("os.Getenv(key)")
+	btcNodeZmqAddr = os.Getenv("BTC_NODE_ZMQ_ADDR")
 	serverPort     = os.Getenv("PORT")
 )
 
