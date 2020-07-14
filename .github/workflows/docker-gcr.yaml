@@ -1,0 +1,50 @@
+name: Docker GCR build and push
+# This workflow is triggered on pushes to the repository.
+on:
+  push:
+    branches:    
+      - master
+    
+  workflow_dispatch:
+    inputs:
+      gcr_host:
+        description: 'Google Container Registry Host'
+        required: true
+        default: 'gcr.io'
+      image_name:
+        description: 'Name of the image. Should be specified without domain and project.'
+        required: true
+        default: 'btc-node-proxy'
+      image_tag:
+        description: 'Image tag to set for the built image.'
+        required: true
+        default: 'latest'
+
+env:
+  GOOGLE_PROJECT_ID: webicluster
+  GCLOUD_SERVICE_KEY: '{
+    "type": "service_account",
+    "project_id": "webicluster",
+    "private_key_id": "29de2df356b324e3079b7a4f5c97518d78cdd2f5",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQDlGAd9Sng0XurT\nMr4jrL/WDIWHIuluSLd4ccXswrbD2ORPPF0qweZCYXuJIV4ofk+G2CSrtfcmca6G\nSg/1S/tsvcF5QFbVHQVIuH5gJ6pBs3B6oD1PDoDCopQVo/u1Er2u/ixFRzD072Yy\nsw6RyMpCyOyrSMuYap6NPSGXbFVkYTKEaWVXzlgTh37faS0Qy059JsgQwWUPiXHN\nCJKGruEo5sUzCGoY6qY1xE2BCpJknA2IPnRFVP9oa0lNIvq/WDj/6k+dImS4+/KD\nMTP7RmnfgbgQ+kKgbFbhb1gha5zUgVfJiwtb0DqcnivB01kx5JTeZfirFpPYvVp+\nvOTBBdGHAgMBAAECgf9pnNQq1ynrmQmRTwHNQe2Un4BHpwhvEEC3zOVj3uuMkS9y\n+rl/qN9YrNSMcUntx23BlxZxTxAsyYGK+/t2pafl8pAG/WWx+iNZjOdBWihtscRu\nnmvmTAp7Eb32ao/36fZU8oRMVIDgMhI1oQc3BBizYf/6aw3Eryp7b++qucjugXpE\npXJpN7rNvU+gm70pZdU76hZcsPFB6fLFW8fwC/yj26Wa6BZtyoxQbPSved4GxB3y\n58zbEyzoHDtc49NrirgXPoneYu43ZYIvBLE6FBLCEZPFwzeHWp0i+HjSovW7JfJk\nV3GkXYGu/xzuLYTSTJki/7ZbEiB1PTuM6jYwetkCgYEA9E/ewziS6D5hSwg3XXhd\nnw5mghM4WTpOL2YWAZOqdMrE04czylIC6YHDKte7CHnEgY9k/ZsIiEVyTBvLb5Kc\nmPALNXGrm1H6U1lTJKHZYqcV6YOhAeTlZuPv96UJkWE2eRmlWfpUaByb06q9vIOx\n+Pms2UCkP2FCzWzvoX9ptlMCgYEA8A3HtjDM3AwET9/3l8Zk5uTeEBGd9YDeAzG/\ntwk9dVRBHAzBN1L66kN2ZOo8yg9Uam+hkgB33Bn95Pnm+BqU/Qc8HXlmnkoE3GBz\nw6VzCtk488W4NL3+/yzRqwA6wum7BhkqediwRQElabhkG47YA4pp5rjFIYwjyRQ+\nGgNpqX0CgYEA2bANIk/Xfn6OvId+pZdpfB8dsYskq0Srg8pnk1IbEOPXy07uE7lN\nhPitiRAeRCgTswmtB9fLG3kdpbkiZLDzPcathhpZuRSrgvbVgY+BHkkY2jACF6j3\nyt0Q5c01IEfJfNAgKHNIIFhVdJ3vX/jMbLczj4TslNi56EbHolPgQqcCgYBhPuPZ\nnZlPxxp0FSHi/T7g/nQrBEf+LW9C0gN9LaQVBMW/jDc1p0r4Xc33gaCQpncnCwPj\n9oaXxnvBJ692cKZMfoLO2eBFXWzsrbIX3s1k5qyYrE88Jn/HdauWX2huj2rxRH6d\nj7eQrK8wTb9YHpzJimfuTImnVnMkwSuLNDi4rQKBgEMkexfXnpX7Q8/VxMRUENY/\nzUpHWuDyJM9hoZEPMyVllt75g1UmgCmeFBJewJLTEUDT6k+/Awdy/8n+7lOsAnU7\ne/j8pCHQH8f5Pb47UXrLM4WN3PYx/r/PZg22dHeKSlvj5ZYXZ355ddyb5wAsCm6H\nNKGDv0ypCjcg3YeOB74G\n-----END PRIVATE KEY-----\n",
+    "client_email": "nodehodl@webicluster.iam.gserviceaccount.com",
+    "client_id": "109055214862292262508",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nodehodl%40webicluster.iam.gserviceaccount.com"
+  }'
+
+jobs:
+
+  docker:
+    name: Push image to docker registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build and push docker image to GCR
+        uses: RaccoonDev/push-docker-gcr@v1
+        with:
+          gcr_host: gcr.io
+          image_name: btc-node-proxy
+          image_tag: latest

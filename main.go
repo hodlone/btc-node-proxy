@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"sync"
 
 	"btc-node-proxy/listener"
@@ -19,7 +18,7 @@ var (
 
 func main() {
 
-	log.Printf("env var %v\n", btcNodeZmqAddr)
+	log.Printf("BTC_NODE_ZMQ_ADDR => %v\n", btcNodeZmqAddr)
 	wg := new(sync.WaitGroup)
 
 	wg.Add(3)
