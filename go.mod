@@ -8,6 +8,7 @@ require (
 	github.com/dyzz/gobtclib v0.0.0-20160201094650-547ec01bd5e2
 	github.com/go-zeromq/zmq4 v0.10.0
 	github.com/pebbe/zmq4 v1.2.1
+	github.com/piotrnar/gocoin v0.0.0-20200709180402-a41eb3d3e954
 	github.com/zeromq/goczmq v4.1.0+incompatible // indirect
 	google.golang.org/protobuf v1.25.0
 )
