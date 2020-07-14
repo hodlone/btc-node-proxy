@@ -6,19 +6,27 @@ import (
 
 	"btc-node-proxy/listener"
 	"btc-node-proxy/server"
+	"btc-node-proxy/nats"
 )
 
 var (
-	btcNodeZmqAddr = "tcp://bitcoin-core.bitcoin-test.svc.cluster.local:29000"
-	serverPort     = "4500"
+	btcNodeZmqAddr = os.Getenv("BTC_NODE_ZMQ_ADDR")
+	serverPort     = os.Getenv("PORT")
+	natsAddr 			 = os.Getenv("NATS_ADDR")
+	natsName 			 = os.Getenv("NATS_NAME")
 )
 
 func main() {
 
-	log.Printf("env var %v\n", btcNodeZmqAddr)
+	log.Printf("BTC_NODE_ZMQ_ADDR => %v\n", btcNodeZmqAddr)
 	wg := new(sync.WaitGroup)
 
-	wg.Add(2)
+	wg.Add(3)
+
+	go func() {
+		nats.Start(natsAddr, natsName)
+		wg.Done()
+	}
 
 	go func() {
 		server.Start(serverPort)
