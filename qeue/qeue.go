@@ -2,15 +2,18 @@ package qeue
 
 import (
 	"log"
+	"os"
 
 	"github.com/nats-io/nats.go"
 )
 
-// NATS export connection pointer to nats
-var NATS *nats.Conn
+var (
+	natsAddr = os.Getenv("NATS_ADDR")
+	natsName = os.Getenv("NATS_NAME")
+)
 
 // Start a connection with a nats instance and return a pointer to it
-func Start(natsAddr string, natsName string) {
+func Start() {
 	// connecting to a test server, replace the arg for the cluster conn string
 	// nats://<kubernetes-svc>.<namespace>:port
 	// add a name to the connection for monitoring/debuggin purposes
@@ -25,6 +28,12 @@ func Start(natsAddr string, natsName string) {
 
 // Qpub ...
 func Qpub(s string, m []byte) {
+	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))
+	if err != nil {
+		log.Fatal(err)
+	}
+	// defer connection close
+	defer NATS.Close()
 	NATS.Publish(s, m)
 	NATS.Flush()
 	if err := NATS.LastError(); err != nil {

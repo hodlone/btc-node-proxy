@@ -12,8 +12,6 @@ import (
 var (
 	btcNodeZmqAddr = os.Getenv("BTC_NODE_ZMQ_ADDR")
 	serverPort     = os.Getenv("PORT")
-	natsAddr       = os.Getenv("NATS_ADDR")
-	natsName       = os.Getenv("NATS_NAME")
 )
 
 func main() {
@@ -22,7 +20,7 @@ func main() {
 	wg.Add(3)
 
 	go func() {
-		qeue.Start(natsAddr, natsName)
+		qeue.Start()
 		wg.Done()
 	}()
 
