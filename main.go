@@ -1,12 +1,11 @@
 package main
 
 import (
-	"log"
 	"os"
 	"sync"
 
 	"btc-node-proxy/listener"
-	"btc-node-proxy/nats"
+	"btc-node-proxy/qeue"
 	"btc-node-proxy/server"
 )
 
@@ -18,14 +17,12 @@ var (
 )
 
 func main() {
-
-	log.Printf("BTC_NODE_ZMQ_ADDR => %v\n", btcNodeZmqAddr)
 	wg := new(sync.WaitGroup)
 
 	wg.Add(3)
 
 	go func() {
-		nats.Start(natsAddr, natsName)
+		qeue.Start(natsAddr, natsName)
 		wg.Done()
 	}()
 
