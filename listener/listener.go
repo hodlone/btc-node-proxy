@@ -1,25 +1,11 @@
 package listener
 
 import (
-	"encoding/hex"
+	handler "btc-node-proxy/listener/handler"
 	"log"
 
 	"github.com/pebbe/zmq4"
-	"github.com/piotrnar/gocoin/lib/btc"
 )
-
-func decode(src []byte) {
-	// log.Printf("decoding length: %v", len(src))
-	dst := make([]byte, hex.DecodedLen(len(src)))
-	log.Printf("DST: %v", dst)
-	log.Printf("HEX: %v", hex.EncodeToString(src))
-	// n, err := hex.Decode(dst, src)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// fmt.Printf("%s\n", dst[:n])
-}
 
 func Start(btcNodeZmqAddr string) {
 	subscriber, _ := zmq4.NewSocket(zmq4.SUB)
@@ -27,10 +13,10 @@ func Start(btcNodeZmqAddr string) {
 
 	subscriber.Connect(btcNodeZmqAddr)
 
-	// subscriber.SetSubscribe("hashblock")
-	// subscriber.SetSubscribe("hashtx")
+	subscriber.SetSubscribe("hashblock")
+	subscriber.SetSubscribe("hashtx")
 	subscriber.SetSubscribe("rawblock")
-	// subscriber.SetSubscribe("rawtx")
+	subscriber.SetSubscribe("rawtx")
 
 	log.Println("Listening")
 	for {
@@ -40,12 +26,27 @@ func Start(btcNodeZmqAddr string) {
 			continue
 		}
 
-		routingID := frames[0]
-		framez := frames[1:]
-		log.Printf("routingID: %v", routingID)
-		log.Printf("framez: %v", framez)
-		decode(framez[1])
-		decode(framez[0])
+		topic := string(frames[0])
+		body := frames[1:]
+
+		// log.Printf("body: %v", body[1])
+		// decode(body[1])
+
+		log.Printf("topic: %v", topic)
+		switch topic {
+		case "hashblock":
+			handler.HashBlock(body[0])
+		case "rawblock":
+			handler.RawBlock(body[0])
+			// case "hashtx":
+			// hexi := hex.EncodeToString(body[0])
+			// log.Printf("From HashTx HEX: %v", hexi)
+			// handler.HashTx(topic)
+			// case "rawtx":
+			// tx, _ := btc.NewTxIn(body[0])
+			// log.Printf("From RawTx Hash: %v", tx.Sequence)
+			// handler.RawTx(topic)
+		}
 		// if msg == "rawblock" {
 		// 	continue
 		// }
@@ -53,54 +54,61 @@ func Start(btcNodeZmqAddr string) {
 		// addrs := []byte(msg)
 		// log.Printf("BYTE: %v", addrs)
 		// decode(addrs)
-		bl, _ := btc.NewBlock(framez[0])
 
-		log.Printf("Block hash: %v", bl.Hash)
-		log.Printf("Block time: %v", bl.BlockTime)
-		log.Printf("Block version: %v", bl.Version)
+		// log.Printf("Block Raw: %v", bl.Raw)
+		// log.Printf("Block TxCount: %v", bl.TxCount)
+		// log.Printf("Block Txs: %v", bl.Txs)
+
+		// for _, tx := range bl.Txs {
+		// 	log.Printf("Tx Hash: %v", tx.Hash)
+		// 	for _, output := range tx.TxOut {
+		// 		s := output.String(true)
+		// 		log.Printf("Tx Out Value: %v", s)
+		// 	}
+		// type Tx struct {
+		// 	Version   uint32
+		// 	TxIn      []*TxIn
+		// 	TxOut     []*TxOut
+		// 	SegWit    [][][]byte
+		// 	Lock_time uint32
+
+		// 	// These three fields should be set in block.go:
+		// 	Raw             []byte
+		// 	Size, NoWitSize uint32
+		// 	Hash            Uint256
+
+		// 	// This field is only set in chain's ProcessBlockTransactions:
+		// 	Fee uint64
+
+		// 	wTxID Uint256
+
+		// 	hash_lock    sync.Mutex
+		// 	hashPrevouts []byte
+		// 	hashSequence []byte
+		// 	hashOutputs  []byte
+		// }
+		// }
+		// log.Printf("Block time: %v", bl.BlockTime)
+		// log.Printf("Block version: %v", bl.Version)
+
+		// type Block struct {
+		// 	Raw               []byte
+		// 	Hash              *Uint256
+		// 	Txs               []*Tx
+		// 	TxCount, TxOffset int  // Number of transactions and byte offset to the first one
+		// 	Trusted           bool // if the block is trusted, we do not check signatures and some other things...
+		// 	LastKnownHeight   uint32
+
+		// 	BlockExtraInfo // If we cache block on disk (between downloading and comitting), this data has to be preserved
+
+		// 	MedianPastTime uint32 // Set in PreCheckBlock() .. last used in PostCheckBlock()
+
+		// 	// These flags are set in BuildTxList() used later (e.g. by script.VerifyTxScript):
+		// 	NoWitnessSize int
+		// 	BlockWeight   uint
+		// 	TotalInputs   int
+
+		// 	NoWitnessData []byte // This is set by BuildNoWitnessData()
+		// }
 	}
 }
-
-// func Start(btcNodeZmqAddr string) {
-// 	subscriber, _ := zmq4.NewSocket(zmq4.SUB)
-// 	subscriber.SetLinger(0)
-
-// 	subscriber.Connect(btcNodeZmqAddr)
-
-// 	// subscriber.SetSubscribe("hashblock")
-// 	// subscriber.SetSubscribe("hashtx")
-// 	subscriber.SetSubscribe("rawblock")
-// 	// subscriber.SetSubscribe("rawtx")
-
-// 	log.Println("Listening")
-// 	for {
-// 		// e, addr, v, err := subscriber.RecvEvent(0)
-// 		msg, err := subscriber.Recv(0)
-// 		if err != nil {
-// 			log.Println(err)
-// 			continue
-// 		}
-
-// 		// log.Printf("Event: %v", e)
-// 		// addrs := []byte(addr)
-// 		// log.Printf("Address: %v", addr)
-// 		// decode(addrs)
-// 		// log.Printf("Value: %v", v)
-// 		bl, er := btc.NewBlock([]byte(addr))
-
-// 		if er != nil {
-// 			log.Println(err)
-// 			continue
-// 		}
-
-// 		log.Printf("Block hash: %v", bl.Hash)
-// 		log.Printf("Block time: %v", bl.BlockTime)
-// 		log.Printf("Block version: %v", bl.Version)
-// 		// log.Printf("Block parent: %v", btc.NewUint256(bl.Parent).String())
-// 		// log.Printf("Block merkle root: %v", hex.EncodeToString(bl.MerkleRoot))
-// 		log.Printf("Block bits: %v", bl.Bits)
-// 		log.Printf("Block size: %v", len(bl.Raw))
-// 		// decode([]byte(s))
-// 		// log.Println("rec", s)
-// 	}
-// }
