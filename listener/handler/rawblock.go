@@ -24,7 +24,7 @@ func RawBlock(msg []byte) {
 	qeue.Qpub("btc.rawblock", json)
 }
 
-func printTxs(bl) {
+func printTxs() {
 	// for _, tx := range bl.Txs {
 	// 	log.Printf("Tx Hash: %v", tx.Hash)
 	// 	for _, output := range tx.TxOut {
