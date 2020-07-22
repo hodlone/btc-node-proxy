@@ -12,7 +12,6 @@ services:
     "
     ports:
       - 29000:29000
-
   btc-go-proxy:
     build: .
     depends_on:

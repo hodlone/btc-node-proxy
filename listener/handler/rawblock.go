@@ -14,6 +14,7 @@ func RawBlock(msg []byte) {
 	bl, _ := btc.NewBlock(msg)
 	bl.BuildTxList()
 
+	// printTxs(bl)
 	json, err := json.Marshal(bl)
 
 	if err != nil {
@@ -24,12 +25,12 @@ func RawBlock(msg []byte) {
 	qeue.Qpub("btc.rawblock", json)
 }
 
-func printTxs() {
-	// for _, tx := range bl.Txs {
-	// 	log.Printf("Tx Hash: %v", tx.Hash)
-	// 	for _, output := range tx.TxOut {
-	// 		s := output.String(true)
-	// 		log.Printf("Tx Out Value: %v", s)
-	// 	}
-	// }
+func printTxs(bl *btc.Block) {
+	for _, tx := range bl.Txs {
+		log.Printf("Tx Hash: %v", tx.Hash)
+		for _, output := range tx.TxOut {
+			s := output.String(true)
+			log.Printf("Tx Out Value: %v", s)
+		}
+	}
 }
