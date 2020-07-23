@@ -4,12 +4,14 @@ go 1.13
 
 require (
 	github.com/alecthomas/gozmq v0.0.0-20140622232202-d1b01a2df6b2
+	github.com/btcsuite/btcd v0.20.1-beta
+	github.com/btcsuite/btcutil v1.0.2
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyzz/gobtclib v0.0.0-20160201094650-547ec01bd5e2
 	github.com/go-zeromq/zmq4 v0.10.0
 	github.com/nats-io/nats.go v1.10.0
 	github.com/pebbe/zmq4 v1.2.1
-	github.com/piotrnar/gocoin v0.0.0-20200709180402-a41eb3d3e954
 	github.com/zeromq/goczmq v4.1.0+incompatible // indirect
+	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
 	google.golang.org/protobuf v1.25.0
 )
