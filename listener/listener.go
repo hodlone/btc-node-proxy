@@ -20,7 +20,7 @@ func Start(btcNodeZmqAddr string) {
 	subscriber.SetSubscribe("rawblock")
 	subscriber.SetSubscribe("rawtx")
 
-	log.Println("Listening")
+	log.Println("ZMQ Listening")
 	for {
 		frames, err := subscriber.RecvMessageBytes(0)
 		if err != nil {
@@ -31,20 +31,16 @@ func Start(btcNodeZmqAddr string) {
 		topic := string(frames[0])
 		body := frames[1:]
 
-		log.Printf("topic: %v", topic)
+		log.Printf("Topic: %v", topic)
 		switch topic {
 		case "hashblock":
 			handler.HashBlock(body[0])
 		case "rawblock":
 			handler.RawBlock(body[0])
-			// case "hashtx":
-			// hexi := hex.EncodeToString(body[0])
-			// log.Printf("From HashTx HEX: %v", hexi)
-			// handler.HashTx(topic)
-			// case "rawtx":
-			// tx, _ := btc.NewTxIn(body[0])
-			// log.Printf("From RawTx Hash: %v", tx.Sequence)
-			// handler.RawTx(topic)
+		case "hashtx":
+			handler.HashTx(body[0])
+		case "rawtx":
+			handler.RawTx(body[0])
 		}
 	}
 }
