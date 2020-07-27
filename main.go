@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"btc-node-proxy/listener"
-	"btc-node-proxy/qeue"
 	"btc-node-proxy/server"
 )
 
@@ -17,12 +16,7 @@ var (
 func main() {
 	wg := new(sync.WaitGroup)
 
-	wg.Add(3)
-
-	go func() {
-		qeue.Start()
-		wg.Done()
-	}()
+	wg.Add(2)
 
 	go func() {
 		server.Start(serverPort)

@@ -5,6 +5,7 @@ NAME=btc-node-proxy
 docker build -t $NAME .
 
 docker run -it --rm \
+--name $NAME \
 --net=host \
 --env PORT=4000 \
 --env BTC_NODE_ZMQ_ADDR=tcp://0.0.0.0:29000 \

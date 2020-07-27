@@ -1,7 +1,8 @@
 package listener
 
 import (
-	handler "btc-node-proxy/listener/handler"
+	"btc-node-proxy/listener/gobHandler"
+	"btc-node-proxy/msq"
 	"log"
 
 	"github.com/pebbe/zmq4"
@@ -34,13 +35,14 @@ func Start(btcNodeZmqAddr string) {
 		log.Printf("Topic: %v", topic)
 		switch topic {
 		case "hashblock":
-			handler.HashBlock(body[0])
+			msq.Qpub(msq.HashBlock, body[0])
 		case "rawblock":
-			handler.RawBlock(body[0])
+			msq.Qpub(msq.RawBlock, body[0])
 		case "hashtx":
-			handler.HashTx(body[0])
+			msq.Qpub(msq.HashTx, body[0])
 		case "rawtx":
-			handler.RawTx(body[0])
+			gobHandler.RawTx(body[0])
+			msq.Qpub(msq.RawTx, body[0])
 		}
 	}
 }
