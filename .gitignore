@@ -1,3 +1,5 @@
 telepresence.*
-main
 .vscode
+bin
+.env
+.prod.env

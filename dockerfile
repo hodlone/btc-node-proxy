@@ -13,7 +13,6 @@ ENV GOARCH=amd64
 RUN apk add --no-cache git && \
     go get -v github.com/cespare/reflex && \
     go install github.com/cespare/reflex
-
 ENTRYPOINT ["make", "watch"]
 
 ######### PROD STAGE #########
