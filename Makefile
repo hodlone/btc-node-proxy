@@ -1,4 +1,4 @@
-include .env
+include .prod.env
 
 ORGNAME := nodehodl
 PROJECTNAME := $(shell basename "$(PWD)")
@@ -8,6 +8,12 @@ IMAGE := $(ORGNAME)/$(PROJECTNAME)
 
 # Make is verbose in Linux. Make it silent.
 MAKEFLAGS += --silent
+
+setup:
+	PORT = 4000
+	BTC_NODE_ZMQ_ADDR = tcp://0.0.0.0:29000
+	NATS_ADDR = nats://localhost:4222
+	NATS_NAME = test-test-test
 
 ## build: Build binary into local bin folder. : make build
 build:
@@ -42,14 +48,12 @@ run-container:
 	NATS_ADDR=$(NATS_ADDR) NATS_NAME=$(NATS_NAME) \
 	bash scripts/run-container.sh
 
-## tele-watch: Start telepresence with watcher enabled : make telepresence-watch
+## tele-watch: Start telepresence with watcher enabled : make tele-watch
 tele-watch:
 	@echo "  >  Telepresence watcher..."
 	@PROJECTNAME=$(PROJECTNAME) GOBASE=$(GOBASE) \
 	IMAGE=$(IMAGE) PORT=$(PORT) \
  	bash scripts/telepresence-watcher.sh
-	#  	BTC_NODE_ZMQ_ADDR=$(BTC_NODE_ZMQ_ADDR) 
-	# NATS_ADDR=$(NATS_ADDR) NATS_NAME=$(NATS_NAME) 
 
 ## clean: Clean build files. Runs `go clean` internally. : make clean
 clean:
