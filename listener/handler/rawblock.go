@@ -1,10 +1,10 @@
 package handler
 
-import "btc-node-proxy/qeue"
+import "btc-node-proxy/msq"
 
 // RawBlock handles the zmq messages published to the "rawblock" socket topic.
 func RawBlock(msg []byte) {
-	qeue.Qpub("btc.rawblock", msg)
+	msq.Qpub("btc.rawblock", msg)
 }
 
 // func RawBlock(msg []byte) {

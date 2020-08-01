@@ -1,4 +1,4 @@
-package qeue
+package msq
 
 import (
 	"log"

@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"btc-node-proxy/listener"
-	"btc-node-proxy/qeue"
+	"btc-node-proxy/msq"
 	"btc-node-proxy/server"
 )
 
@@ -20,7 +20,7 @@ func main() {
 	wg.Add(3)
 
 	go func() {
-		qeue.Start()
+		msq.Start()
 		wg.Done()
 	}()
 
