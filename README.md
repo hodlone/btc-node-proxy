@@ -23,14 +23,3 @@ sudo ln -s "$GOPATH/bin/reflex" /usr/local/bin/
 
 ### ZMQ
 If you wish to raise `btc-node-proxy` directly in the host machine you'll need to install `ZMQ` which is needed to receive block and transaction events from a `bitcoin-core` node, provided the node has been started with necessarry zmq flags.
-
-## Development
-### Host
-
-To start the service from the host simply do `make watch`, this will start the proxy and any changes made to any files ending with `.go` will trigger a rebuild of the service.
-
-See Dependencies section for details on how to start on the host.
-
-### Docker
-
-

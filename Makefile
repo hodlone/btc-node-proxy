@@ -34,6 +34,7 @@ watch:
 	reflex -s -r '\.go$$' make build-run
 
 ## tele-watch: Start telepresence(swaps container) with watcher enabled : make tele-watch
+## : it always uses the image built with the dev target
 tele-watch:
 	@echo "  >  Telepresence watcher..."
 	@PROJECTNAME=$(PROJECTNAME) GOBASE=$(GOBASE) IMAGE=$(IMAGE) \
