@@ -14,6 +14,7 @@ var (
 
 // Start a connection with a nats instance and return a pointer to it
 func Start() {
+	log.Printf("Connecting to NATS client at: %v as %v", natsAddr, natsName)
 	// connecting to a test server, replace the arg for the cluster conn string
 	// nats://<kubernetes-svc>.<namespace>:port
 	// add a name to the connection for monitoring/debuggin purposes
