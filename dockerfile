@@ -17,8 +17,11 @@ ENTRYPOINT ["make", "watch"]
 
 ######### PROD STAGE #########
 FROM alpine as prod
-WORKDIR /app
-RUN apk add --no-cache make gcc g++ zeromq zeromq-dev
-COPY --from=base /app/main /app/.
+RUN apk add --no-cache gcc g++ zeromq zeromq-dev
+RUN addgroup -g 2468 simps && \
+    adduser -s /bin/sh -G simps -u 2468 -D liluser
+WORKDIR /home/liluser/app
+USER liluser
+COPY --from=base /app/main /home/liluser/app/.
 EXPOSE 4000
-CMD ["/app/main"]
+CMD ["/home/liluser/app/main"]

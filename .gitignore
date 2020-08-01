@@ -1,5 +1,4 @@
 telepresence.*
 .vscode
 bin
-.env
-.prod.env
+*.env
