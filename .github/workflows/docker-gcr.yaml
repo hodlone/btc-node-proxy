@@ -47,4 +47,4 @@ jobs:
         with:
           gcr_host: gcr.io
           image_name: btc-node-proxy
-          image_tag: prod
+          image_tag: latest
