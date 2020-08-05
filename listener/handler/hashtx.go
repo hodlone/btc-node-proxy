@@ -6,7 +6,7 @@ import (
 
 // HashTx handles the zmq messages published to the "hashtx" socket topic.
 func HashTx(msg []byte) {
-	msq.Qpub("btc.hashtx", msg)
+	msq.Qpub("btc.node.zmq.hashtx", msg)
 
 	// Print Transaction Hash
 	// hash := hex.EncodeToString(msg)

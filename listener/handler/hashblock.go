@@ -6,7 +6,7 @@ import (
 
 // HashBlock handles the zmq messages published to the "hashblock" socket topic.
 func HashBlock(msg []byte) {
-	msq.Qpub("btc.hashblock", msg)
+	msq.Qpub("btc.node.zmq.hashblock", msg)
 
 	// Print Blocks Hash
 	// hash := hex.EncodeToString(msg)

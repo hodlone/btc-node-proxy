@@ -39,7 +39,5 @@ func Qpub(s string, m []byte) {
 	NATS.Flush()
 	if err := NATS.LastError(); err != nil {
 		log.Fatal(err)
-	} else {
-		log.Printf("Published [%s] : '%s'\n", s, m)
 	}
 }

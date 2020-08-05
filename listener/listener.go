@@ -30,8 +30,6 @@ func Start(btcNodeZmqAddr string) {
 
 		topic := string(frames[0])
 		body := frames[1:]
-
-		log.Printf("Topic: %v", topic)
 		switch topic {
 		case "hashblock":
 			handler.HashBlock(body[0])
