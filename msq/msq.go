@@ -3,6 +3,7 @@ package msq
 import (
 	"log"
 	"os"
+	"sync"
 
 	"github.com/nats-io/nats.go"
 )
@@ -29,13 +30,19 @@ func Start() {
 
 // Qpub ...
 func Qpub(s string, m []byte) {
+	wg := new(sync.WaitGroup)
+
+	wg.Add(1)
+
 	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Pubbingg!")
 	// defer connection close
 	defer NATS.Close()
-	NATS.Publish(s, m)
+	go NATS.Publish(s, m)
+	wg.Done()
 	NATS.Flush()
 	if err := NATS.LastError(); err != nil {
 		log.Fatal(err)

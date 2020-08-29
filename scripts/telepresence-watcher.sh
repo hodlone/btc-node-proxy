@@ -2,6 +2,8 @@
 
 set -u
 
+echo $PROJECTNAME
+
 telepresence \
 --swap-deployment $PROJECTNAME \
 --method container \

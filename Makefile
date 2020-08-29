@@ -1,5 +1,5 @@
 ORGNAME := nodehodl
-PROJECTNAME := $(shell basename "$(PWD)")
+PROJECTNAME := $(shell basename "$(CURDIR)")
 GOBASE := $(shell pwd)
 GOBIN := $(GOBASE)/bin
 IMAGE := $(ORGNAME)/$(PROJECTNAME)
