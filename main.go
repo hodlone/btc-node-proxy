@@ -20,7 +20,7 @@ func main() {
 	wg.Add(3)
 
 	go func() {
-		msq.Start()
+		msq.StartStanClient()
 		wg.Done()
 	}()
 

@@ -3,48 +3,41 @@ package msq
 import (
 	"log"
 	"os"
-	"sync"
 
 	"github.com/nats-io/nats.go"
+	"github.com/nats-io/stan.go"
 )
 
 var (
-	natsAddr = os.Getenv("NATS_ADDR")
-	natsName = os.Getenv("NATS_NAME")
+	clusterID  = os.Getenv("STAN_CLUSTER_ID")
+	clientID   = os.Getenv("SERVICE_NAME")
+	natsAddr   = os.Getenv("NATS_ADDR")
+	natsName   = os.Getenv("NATS_NAME")
+	natsConn   *nats.Conn
+	stanClient stan.Conn
 )
 
-// Start a connection with a nats instance and return a pointer to it
-func Start() {
+// StartStanClient a connection with a nats instance and return a pointer to it
+func StartStanClient() {
 	log.Printf("Connecting to NATS client at: %v as %v", natsAddr, natsName)
-	// connecting to a test server, replace the arg for the cluster conn string
-	// nats://<kubernetes-svc>.<namespace>:port
-	// add a name to the connection for monitoring/debuggin purposes
+
 	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))
+
+	natsConn = NATS
+
+	sc, err := stan.Connect(clusterID, clientID, stan.NatsConn(natsConn))
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer connection close
-	defer NATS.Close()
+
+	stanClient = sc
 	log.Printf("Connected to NATS client at: %v as %v", natsAddr, natsName)
 }
 
-// Qpub ...
-func Qpub(s string, m []byte) {
-	wg := new(sync.WaitGroup)
-
-	wg.Add(1)
-
-	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))
+// Publish ...
+func Publish(s string, m []byte) {
+	err := stanClient.Publish(s, m)
 	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Pubbingg!")
-	// defer connection close
-	defer NATS.Close()
-	go NATS.Publish(s, m)
-	wg.Done()
-	NATS.Flush()
-	if err := NATS.LastError(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error during publish: %v\n", err)
 	}
 }

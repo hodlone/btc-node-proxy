@@ -1,10 +1,17 @@
 package handler
 
-import "btc-node-proxy/msq"
+import (
+	"btc-node-proxy/msq"
+	"log"
+)
+
+var rawTxCounter = 0
 
 // RawTx handles the zmq messages published to the "rawtx" socket topic.
 func RawTx(msg []byte) {
-	msq.Qpub("btc.node.zmq.rawtx", msg)
+	rawTxCounter++
+	log.Printf("Publishing raw tax %v", rawTxCounter)
+	msq.Publish("btc.node.zmq.rawtx", msg)
 }
 
 // Example of Transaction decoding using "github.com/btcsuite/btcd/wire"
