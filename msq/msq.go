@@ -23,21 +23,33 @@ func StartStanClient() {
 
 	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))
 
+	if err != nil {
+		log.Fatalf("NATS :: %v", err)
+	}
 	natsConn = NATS
 
 	sc, err := stan.Connect(clusterID, clientID, stan.NatsConn(natsConn))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("STAN :: %v", err)
 	}
 
 	stanClient = sc
+
 	log.Printf("Connected to NATS client at: %v as %v", natsAddr, natsName)
 }
 
 // Publish ...
 func Publish(s string, m []byte) {
-	err := stanClient.Publish(s, m)
+	guid, err := stanClient.PublishAsync(s, m, func(lguid string, err error) {
+		if err != nil {
+			log.Fatalf("Error in server ack for guid %s: %v\n", lguid, err)
+		}
+	})
 	if err != nil {
 		log.Fatalf("Error during publish: %v\n", err)
+	}
+
+	if guid == "" {
+		log.Fatal("Expected non-empty guid to be returned.")
 	}
 }
