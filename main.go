@@ -7,6 +7,7 @@ import (
 	"btc-node-proxy/listener"
 	"btc-node-proxy/msq"
 	"btc-node-proxy/server"
+	"btc-node-proxy/vault"
 )
 
 var (
@@ -17,7 +18,7 @@ var (
 func main() {
 	wg := new(sync.WaitGroup)
 
-	wg.Add(3)
+	wg.Add(4)
 
 	go func() {
 		msq.StartStanClient()
@@ -31,6 +32,11 @@ func main() {
 
 	go func() {
 		listener.Start(btcNodeZmqAddr)
+		wg.Done()
+	}()
+
+	go func() {
+		vault.Start()
 		wg.Done()
 	}()
 
