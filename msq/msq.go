@@ -17,8 +17,8 @@ var (
 	stanClient stan.Conn
 )
 
-// StartStanClient a connection with a nats instance and return a pointer to it
-func StartStanClient() {
+// InitStanClient a connection with a nats instance and return a pointer to it
+func InitStanClient() {
 	log.Printf("Connecting to NATS client at: %v as %v", natsAddr, natsName)
 
 	NATS, err := nats.Connect(natsAddr, nats.Name(natsName))

@@ -1,14 +1,19 @@
-package listener
+package main
 
 import (
 	handler "btc-node-proxy/listener/handler"
 	"log"
+	"os"
 
 	"github.com/pebbe/zmq4"
 )
 
-// Start ...
-func Start(btcNodeZmqAddr string) {
+var (
+	btcNodeZmqAddr = os.Getenv("BTC_NODE_ZMQ_ADDR")
+)
+
+// StartZmqListener ...
+func StartZmqListener() {
 
 	subscriber, _ := zmq4.NewSocket(zmq4.SUB)
 	subscriber.SetLinger(0)
