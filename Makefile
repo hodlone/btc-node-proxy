@@ -10,7 +10,7 @@ MAKEFLAGS += --silent
 # build: Build binary into local bin folder. : make build
 build:
 	@echo "  >  Building binary..."
-	go build -o $(GOBIN)/main main.go
+	go build -o $(GOBIN)/main *.go
 	chmod +x $(GOBIN)/main
 
 # run: Runs binary in local bin folder. : make run
@@ -27,6 +27,13 @@ build-container:
 	@IMAGE=$(IMAGE) TARGET=$(target) \
 	bash scripts/build-container.sh
 
+## run-container: Runs container locally in dev mode : make run-container
+run-container:
+	@echo "  >  Starting container locally..."
+	@IMAGE=$(IMAGE) GOBASE=$(GOBASE) TARGET=dev \
+	PORT=4000 \
+	bash scripts/run-container.sh
+
 # watch: Meant to be used by the container on dev target : make watch
 watch:
 	@echo "  >  Starting reflex watcher..."
@@ -37,7 +44,7 @@ watch:
 ## : it always uses the image built with the dev target
 tele-watch:
 	@echo "  >  Telepresence watcher..."
-	@PROJECTNAME=$(PROJECTNAME) GOBASE=$(GOBASE) IMAGE=$(IMAGE) \
+	@PROJECTNAME=$(PROJECTNAME) GOBASE=$(GOBASE) IMAGE=$(IMAGE) TARGET=dev \
  	bash scripts/telepresence-watcher.sh
 
 ## clean: Clean build files. Runs `go clean` internally. : make clean

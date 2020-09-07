@@ -2,12 +2,10 @@ package handler
 
 import (
 	"btc-node-proxy/msq"
-	"log"
 )
 
 // RawBlock handles the zmq messages published to the "rawblock" socket topic.
 func RawBlock(msg []byte) {
-	log.Println("Publishing raw block")
 	msq.Publish("btc.node.zmq.rawblock", msg)
 }
 

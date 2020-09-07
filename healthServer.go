@@ -9,10 +9,8 @@ import (
 	"time"
 )
 
-// redefine to healthServerPort and HEALTH_SERVER_PORT
-var (
-	serverPort = os.Getenv("PORT")
-)
+// redefine to healthServerPort and HTTP_SERVER_PORT
+var serverPort = os.Getenv("HTTP_SERVER_PORT")
 
 // HealthStatus ...
 type HealthStatus struct {
