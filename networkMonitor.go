@@ -28,7 +28,7 @@ func (t *task) schedule() {
 	}()
 
 	done <- true
-	log.Printf("Ticker stopped")
+	log.Println("Ticker stopped")
 }
 
 // StartNetworkMonitor ...
