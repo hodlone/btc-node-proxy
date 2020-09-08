@@ -8,34 +8,41 @@ import (
 	"github.com/btcsuite/btcd/rpcclient"
 )
 
-var Client *rpcclient.Client
+var (
+	// Client is the exported RPC interface for the bitcoin client
+	Client  *rpcclient.Client
+	rpcHost string = os.Getenv("BITCOIN_RPC_HOST")
+	rpcUser string = os.Getenv("BITCOIN_RPC_USER")
+	rpcPass string = os.Getenv("BITCOIN_RPC_PASSWORD")
+)
 
 // InitRPCClient initializes a package instance of the rpc client
 func InitRPCClient() {
-	log.Printf("HOST :: %v", os.Getenv("BITCOIN_RPC_HOST"))
-	log.Printf("USER :: %v", os.Getenv("BITCOIN_RPC_USER"))
-	log.Printf("PASSWORD :: %v", os.Getenv("BITCOIN_RPC_PASSWORD"))
 	// Connect to local bitcoin core RPC server using HTTP POST mode.
 	connCfg := &rpcclient.ConnConfig{
-		Host:         "bitcoin-core:8332",
-		User:         os.Getenv("BITCOIN_RPC_USER"),
-		Pass:         os.Getenv("BITCOIN_RPC_PASSWORD"),
+		Host:         rpcHost,
+		User:         rpcUser,
+		Pass:         rpcPass,
 		HTTPPostMode: true, // Bitcoin core only supports HTTP POST mode
 		DisableTLS:   true, // Bitcoin core does not provide TLS by default
 	}
-	// log.Printf("COnfig %v", connCfg)
+
+	log.Printf("Connecting Bitcoin RPC interface at %v as %v", rpcHost, rpcUser)
 	// Notice the notification parameter is nil since notifications are
 	// not supported in HTTP POST mode.
 	client, err := rpcclient.New(connCfg, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("Succesfully Connected Bitcoin RPC interface")
 	Client = client
 	// defer client.Shutdown()
 	c, _ := Client.GetConnectionCount()
 	log.Printf("Conn Count %v", c)
 }
 
+// GetBlockCount returns the latest block in the bitcoin blockchain
 func GetBlockCount() int64 {
 	// Get the current block count.
 	blockCount, err := Client.GetBlockCount()
@@ -46,8 +53,8 @@ func GetBlockCount() int64 {
 	return blockCount
 }
 
+// ListUnspent returns unspent transactions associated with the target node address
 func ListUnspent() []btcjson.ListUnspentResult {
-	// Get the current block count.
 	unspents, err := Client.ListUnspent()
 	if err != nil {
 		log.Fatal(err)
