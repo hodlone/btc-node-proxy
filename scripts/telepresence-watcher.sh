@@ -9,4 +9,4 @@ telepresence \
 --method container \
 --docker-run --rm -it \
 -v $GOBASE:/app \
-$IMAGE:dev
+$IMAGE:$TARGET

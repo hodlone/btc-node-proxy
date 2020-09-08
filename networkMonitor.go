@@ -2,7 +2,7 @@ package main
 
 import (
 	"btc-node-proxy/bitcoin"
-	"fmt"
+	"log"
 	"sync"
 	"time"
 )
@@ -28,19 +28,24 @@ func (t *task) schedule() {
 	}()
 
 	done <- true
-	fmt.Println("Ticker stopped")
+	log.Println("Ticker stopped")
 }
 
 // StartNetworkMonitor ...
 func StartNetworkMonitor() {
 	testTask := task{job: func() {
-		fmt.Println("Rutine test task")
+		log.Printf("Rutine test task")
 	},
-		interval: 120 * time.Second,
+		interval: 240 * time.Second,
 	}
 
-	taskTwo := task{job: func() { bitcoin.GetBlockCount() },
-		interval: 5 * time.Second,
+	taskTwo := task{job: func() {
+		diff, _ := bitcoin.Client.GetDifficulty()
+		bc, _ := bitcoin.Client.ListUnspent()
+		log.Printf("Difficulty %v", diff)
+		log.Printf("Block Count %v", bc)
+	},
+		interval: 1000 * time.Second,
 	}
 
 	wg := new(sync.WaitGroup)
