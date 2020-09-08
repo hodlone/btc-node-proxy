@@ -9,8 +9,11 @@ import (
 	"time"
 )
 
-// redefine to healthServerPort and HTTP_SERVER_PORT
-var serverPort = os.Getenv("HTTP_SERVER_PORT")
+// redefine to healthServerPort and HEALTH_SERVER_PORT
+var (
+	serverPort  = os.Getenv("HTTP_SERVER_PORT")
+	serviceName = os.Getenv("SERVICE_NAME")
+)
 
 // HealthStatus ...
 type HealthStatus struct {
@@ -23,7 +26,7 @@ func healthCheck(res http.ResponseWriter, req *http.Request) {
 	currentTime := time.Now()
 
 	healthStatus := HealthStatus{
-		Status:    "btc-node-proxy is Healthy!",
+		Status:    fmt.Sprintf("%v is Healthy!", serviceName),
 		TimeStamp: currentTime.Format("2006-01-02 15:04:05"),
 	}
 
@@ -42,7 +45,7 @@ func StartHealthServer() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/healthz", healthCheck)
-	log.Printf("Proxy healthcheck online on port: %v", serverPort)
-	serverPort = fmt.Sprintf(":%v", serverPort)
-	log.Fatal(http.ListenAndServe(serverPort, mux))
+	log.Printf("%v healthcheck online on port: %v", serviceName, serverPort)
+	p := fmt.Sprintf(":%v", serverPort)
+	log.Fatal(http.ListenAndServe(p, mux))
 }
