@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"btc-node-proxy/msq"
+	"github.com/NodeHodl/btc-node-proxy/msq"
 )
 
 // HashBlock handles the zmq messages published to the "hashblock" socket topic.

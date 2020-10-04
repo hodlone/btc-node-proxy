@@ -1,4 +1,4 @@
-module btc-node-proxy
+module github.com/NodeHodl/btc-node-proxy
 
 go 1.13
 

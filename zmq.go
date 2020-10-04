@@ -1,9 +1,10 @@
 package main
 
 import (
-	handler "btc-node-proxy/listener/handler"
 	"log"
 	"os"
+
+	handler "github.com/NodeHodl/btc-node-proxy/listener/handler"
 
 	"github.com/pebbe/zmq4"
 )

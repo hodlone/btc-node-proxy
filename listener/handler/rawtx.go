@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"btc-node-proxy/msq"
+	"github.com/NodeHodl/btc-node-proxy/msq"
 )
 
 // RawTx handles the zmq messages published to the "rawtx" socket topic.

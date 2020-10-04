@@ -3,8 +3,8 @@ package main
 import (
 	"sync"
 
-	"btc-node-proxy/bitcoin"
-	"btc-node-proxy/msq"
+	"github.com/NodeHodl/btc-node-proxy/bitcoin"
+	"github.com/NodeHodl/btc-node-proxy/msq"
 )
 
 func main() {

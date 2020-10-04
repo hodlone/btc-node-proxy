@@ -1,6 +1,6 @@
 package handler
 
-import "btc-node-proxy/msq"
+import "github.com/NodeHodl/btc-node-proxy/msq"
 
 // HashTx handles the zmq messages published to the "hashtx" socket topic.
 func HashTx(msg []byte) {

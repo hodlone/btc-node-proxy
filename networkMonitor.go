@@ -1,7 +1,7 @@
 package main
 
 import (
-	"btc-node-proxy/bitcoin"
+	"github.com/NodeHodl/btc-node-proxy/bitcoin"
 	"log"
 	"sync"
 	"time"
