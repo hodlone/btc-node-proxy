@@ -4,13 +4,12 @@ import (
 	"sync"
 
 	"github.com/NodeHodl/btc-node-proxy/bitcoin"
-	"github.com/NodeHodl/btc-node-proxy/msq"
 )
 
 func main() {
 	// Clients are initialized
 	bitcoin.InitRPCClient()
-	msq.InitStanClient()
+	// msq.InitStanClient()
 
 	wg := new(sync.WaitGroup)
 
