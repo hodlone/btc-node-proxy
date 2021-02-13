@@ -1,4 +1,4 @@
-FROM golang:1.13.12-alpine3.12 as base
+FROM gcr.io/nodehodl/go-base:ssh as base
 
 RUN apk add --no-cache make gcc g++ zeromq zeromq-dev
 WORKDIR /app
