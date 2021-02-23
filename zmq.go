@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	handler "github.com/NodeHodl/btc-node-proxy/listener/handler"
+	// handler "github.com/NodeHodl/btc-node-proxy/listener/handler"
 
 	"github.com/pebbe/zmq4"
 )
@@ -35,16 +35,18 @@ func StartZmqListener() {
 		}
 
 		topic := string(frames[0])
-		body := frames[1:]
+		// body := frames[1:]
 		switch topic {
 		case "hashblock":
-			handler.HashBlock(body[0])
+			// handler.HashBlock(body[0])
 		case "rawblock":
-			handler.RawBlock(body[0])
+			log.Println("GOT NEW BLOCK ON ZMQ port 29000!")
+			// handler.RawBlock(body[0])
 		case "hashtx":
-			handler.HashTx(body[0])
+			// handler.HashTx(body[0])
 		case "rawtx":
-			handler.RawTx(body[0])
+			log.Println("GOT NEW TX ON ZMQ port 29000!")
+			// handler.RawTx(body[0])
 		}
 	}
 }

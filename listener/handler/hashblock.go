@@ -1,8 +1,6 @@
 package handler
 
-import (
-	"github.com/NodeHodl/btc-node-proxy/msq"
-)
+import "github.com/NodeHodl/btc-node-proxy/msq"
 
 // HashBlock handles the zmq messages published to the "hashblock" socket topic.
 func HashBlock(msg []byte) {
